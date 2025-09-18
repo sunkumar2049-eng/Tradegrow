@@ -231,34 +231,43 @@ const UserDashboard = () => {
                     <h6 className="mb-0">Settings</h6>
                 </div>
 
-                {/* Select Market Types */}
+
+                {/* Industry Type Dropdown (always visible) */}
                 <div className="mb-2">
-                    <label className="form-label text-white-50 small">Select Market Types</label>
+                    <label className="form-label text-white-50 small">Industry Type</label>
                     <select 
                         className="form-select form-select-sm bg-secondary text-white border-secondary"
-                        value={marketType}
-                        onChange={(e) => setMarketType(e.target.value)}
+                        value={selectedSector}
+                        onChange={(e) => {
+                            setSelectedSector(e.target.value);
+                            setSelectedIndustry('All');
+                        }}
                     >
-                        <option value="US">🇺🇸 Select Market</option>
-                        <option value="EU">🇪🇺 European Markets</option>
-                        <option value="ASIA">🌏 Asian Markets</option>
+                        <option value="All">All Sectors</option>
+                        {Object.keys(industryData).map(sector => (
+                            <option key={sector} value={sector}>{sector}</option>
+                        ))}
                     </select>
                 </div>
 
-                {/* Select Market */}
-                <div className="mb-2">
-                    <label className="form-label text-white-50 small">Select Market</label>
-                    <select 
-                        className="form-select form-select-sm bg-secondary text-white border-secondary"
-                        value={marketCharts}
-                        onChange={(e) => setMarketCharts(e.target.value)}
-                    >
-                        <option value="All">📊 Select Market Charts</option>
-                        <option value="NYSE">NYSE</option>
-                        <option value="NASDAQ">NASDAQ</option>
-                        <option value="S&P500">S&P 500</option>
-                    </select>
-                </div>
+                {/* Select Industry Dropdown (always visible) */}
+                {selectedSector !== 'All' && industryData[selectedSector] && (
+                    <div className="mb-2">
+                        <label className="form-label text-white-50 small">Select Industry</label>
+                        <select 
+                            className="form-select form-select-sm bg-secondary text-white border-secondary"
+                            value={selectedIndustry}
+                            onChange={(e) => setSelectedIndustry(e.target.value)}
+                        >
+                            <option value="All">All Industries</option>
+                            {Object.keys(industryData[selectedSector]).map(industry => (
+                                <option key={industry} value={industry}>
+                                    {industry} ({industryData[selectedSector][industry].industry_code})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
 
                 {/* Chart Watchlist */}
                 <div className="mb-3">
